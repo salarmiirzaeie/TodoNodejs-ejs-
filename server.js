@@ -1,33 +1,33 @@
-const path=require('path')
+const path = require("path");
 
-const express=require('express')
-const bodyParser=require('body-parser')
-const {setStatics}=require('./utils/statics')
-const adminRoutes=require('./routes/admin')
-const app=express()
+const express = require("express");
+const bodyParser = require("body-parser");
+
+const { setStatics } = require("./utils/statics");
+const adminRoutes = require("./routes/admin");
+const indexRoutes = require("./routes/index");
+const errorController = require("./controllers/error");
+
+const app = express();
+
 //Middlewares
-app.use(bodyParser.urlencoded({extended:false}))
-//end Middlewares
-
-
+app.use(bodyParser.urlencoded({ extended: false }));
+//End of middleware
 
 //EJS
-app.set("view engine","ejs")
-app.set("views","views")
-
+app.set("view engine", "ejs");
+app.set("views", "views");
 //End of EJS
 
 //Statics
-setStatics(app)
-
-//End of Statics
+setStatics(app);
 
 //Routes
-app.use('/admin',adminRoutes)
-app.get("/",(req,res)=>{
-    res.render("index",{pageTitle:"کارهای روزمره"})
-})
-//End of Routes
-app.listen(3000,()=>{
-    console.log("server is running")
-})
+app.use(indexRoutes);
+app.use("/admin", adminRoutes);
+//End of routes
+
+//404
+app.use(errorController.get404);
+
+app.listen(3000, () => console.log(`Server is running.`));
