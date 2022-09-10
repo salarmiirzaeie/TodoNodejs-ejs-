@@ -1,4 +1,5 @@
 const path = require("path");
+const sequelize = require("./utils/database");
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -30,4 +31,10 @@ app.use("/admin", adminRoutes);
 //404
 app.use(errorController.get404);
 
-app.listen(3000, () => console.log(`Server is running.`));
+sequelize
+  .sync()
+  .then((res) => {
+    console.log(res);
+    app.listen(3000, () => console.log(`Server is running.`));
+  })
+  .catch((err) => console.log(err));
